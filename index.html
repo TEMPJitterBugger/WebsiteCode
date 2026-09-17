@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta charset="UTF-8">
+    <title>AnyRide</title>
+    <script>
+      window["dataLayer"] = window["dataLayer"] || [];
+      function gtag() {
+        window["dataLayer"].push(arguments);
+      }
+    </script>
+
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="icon" href="#" type="image/x-icon">
+  <script defer="defer" src="runtime.bundle.js"></script><script defer="defer" src="vendors.bundle.js"></script><script defer="defer" src="vendor.bundle.js"></script><script defer="defer" src="app.bundle.js"></script><link href="vendors.css" rel="stylesheet"><link href="vendor.css" rel="stylesheet"><link href="app.css" rel="stylesheet"></head>
+  <body><div id='bigRedBanner' class='alert alert-danger' style='text-align: center;' role='alert'></div>
+    <div id="splash" style="height: 100%;
+        width: 100%;
+        position: absolute;
+        z-index: 1000;
+        background: white;"></div>
+    <div id="map_overlay_div"></div>
+    <div class="container-fluid">
+      <div class="row full-width">
+        <div class="col-12 col-md-12 col-lg-3 content-area-header content-header" aria-hidden="true">
+          <a data-bind="attr: {href:hrefCustomer}" tabindex="-1">
+            <div id="headerimage"></div>
+          </a>
+          <div id="header">
+            <div id="clock">
+              <div id="clockmiddle">
+                <img id="top_pushpin" data-bind="visible: top_pushpin().length > 0, attr: { src: top_pushpin }" src="#" alt="Logo Extra">
+                <div id="clockcontent"></div>
+              </div>
+            </div>
+            <div class="logo-wrapper" data-bind="visible: logo().length > 0">
+              <ul>
+                <li>
+                  <a data-bind="attr: {href:hrefCustomer}" tabindex="-1">
+                    <img id="logo_top" data-bind="visible: logo_top().length > 0, attr: { src: logo_top }" src="#" alt="Logo Top" aria-label="operator site">
+                  </a>
+                </li>
+                <li>
+                  <a data-bind="attr: {href:hrefCustomer}" tabindex="-1">
+                    <img id="logo" data-bind="attr: { src: logo }" src="#" alt="Logo">
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 content-area content-search">
+          <div id="searchy">
+            <table class="tc1" id="search_header">
+              <thead>
+                <tr>
+                  <th class="firstcolsize">
+                    <a id="a_icon" class="iconimage iconimagea">Column A</a>
+                  </th>
+                  <th class="col_header">
+                    <div data-bind="text: textSelectYourStop">AAA</div>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+            <table class="tc1" id="search_spec_stop_header">
+              <tr>
+                <td class="lpadding rpadding">
+                  <h5>
+                    <label for="StopName"><span data-bind="text: textDoYouKnowStop">&nbsp;</span></label>
+                    <label><span data-bind="text: textUseGPS" class="italicinline">&nbsp;</span>
+                    </label>
+                  </h5>
+                </td>
+              </tr>
+            </table>
+            <table class="tc1" id="search_spec_stop_con">
+              <tr>
+                <td class="lpadding rpadding tdcolmin">
+                  <button id="GpsButton" type="button" class="cbutton cbuttongps" data-bind="attr: { 'aria-label': textAriaLabelGps, 'title': textAriaLabelGps }" aria-label="GPS button"></button>
+                </td>
+                <td>
+                  <div id="StopNameDiv">
+                    <input id="StopName" required name="notASearchField" role="textbox" aria-haspopup="false" autofocus data-bind="attr: { title: textStopNameOrNumber, placeholder: textStopNameOrNumber, 'aria-haspopup': ariaHasSuggestionPopup }" title="" class="inputstopnameglobal" placeholder="">
+                    <button type="button" id="clearStopButton" data-bind="click: clearStopName"></button>
+                  </div>
+                </td>
+                <td class="lpadding rpadding tdcolmin">
+                  <button id="SubmitStopButton" type="button" class="cbutton cbuttonsearch" data-bind="attr: { 'aria-label': textAriaLabelSearch, 'title': textAriaLabelSearch }" aria-label="search stop button" aria-controls="noResults"></button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3" id="search_map_div"></td>
+              </tr>
+            </table>
+
+            <div data-bind="visible: !hideRouteStopSelection()">
+              <div class="style-or">
+                <span role="separator" data-bind="text: textOr, attr: { 'aria-label': textAriaOr}"></span>
+              </div>
+              <table class="tc1" id="search_route_dir_stop_header">
+                <tr>
+                  <td class="lpadding rpadding">
+                    <h5 data-bind="text: textGetChooseHeader"></h5>
+                  </td>
+                </tr>
+              </table>
+              <table class="tc1" id="search_route_dir_stop_con">
+                <tr>
+                  <td class="lpadding tdcolmin">
+                    <h4>
+                      <label> <span data-bind="text: textLine"></span>: </label>
+                    </h4>
+                  </td>
+                  <td>
+                    <select id="SelectedLine" class="inputstopnameglobal" aria-controls="SelectedDirection SelectedStopPoint" data-bind="options: lines().sort(compareLines),
+                                            optionsText: 'text',
+                                            optionsCaption: textSelectLine,
+                                            value: selectedLine,
+                                            attr: { title: textSelectLine}"></select>
+                  </td>
+                </tr>
+                <tr data-bind="visible: useDirection">
+                  <td class="lpadding tdcolmin">
+                    <h4>
+                      <label>
+                        <span data-bind="text: textDirection"></span>:
+                      </label>
+                    </h4>
+                  </td>
+                  <td>
+                    <select id="SelectedDirection" class="inputstopnameglobal" aria-controls="SelectedStopPoint" aria-live="polite" aria-busy="false" data-bind="options: directions().sort(compareText), optionsText: 'text', optionsCaption: textSelectDirection, value: selectedDirection, attr: { title: textSelectDirection}"></select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="lpadding tdcolmin">
+                    <h4>
+                      <label> <span data-bind="text: textStop"></span>: </label>
+                    </h4>
+                  </td>
+                  <td>
+                    <select id="SelectedStopPoint" class="inputstopnameglobal" aria-live="polite" aria-busy="false" data-bind="options: stopPoints().sort(compareStopAreas), optionsText: 'text', optionsCaption: textSelectStop, value: selectedStopPoint, attr: { title: textSelectStop }"></select>
+                  </td>
+
+                  <td class="lpadding rpadding tdcolmin">
+                    <button id="SubmitRDSButton" type="button" class="cbutton cbuttonsearch" data-bind="attr: { 'aria-label': textAriaLabelSearch }" aria-label="search" aria-controls="noResults"></button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-5 content-area content-result">
+          <div id="resulty">
+            <div id="spinner" class="spinner-result-wrapper">
+              <div class="spinner-wave">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </div>
+
+            <table id="result_header_table">
+              <thead>
+                <tr id="col3trheader">
+                  <th class="firstcolsize">
+                    <a class="iconimage iconimageb">Column B</a>
+                  </th>
+                  <th class="col_header">
+                    <a id="result"></a>
+                    <div class="header-result" data-bind="text: $root.header"></div>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+
+            <div class="disturbancecontainer" data-bind="foreach: messagesWithoutAffected">
+              <div class="disturbancetext" data-bind="class: getDisturbanceColors">
+                <div class="lineHeader-adjust">
+                  <span data-bind="class: getIconClass" class="iconimageinline iconimageleft" style="color: #ff6a00"></span>
+                </div>
+                <!-- ko if: lines().length <= 5 -->
+                <div class="line-container">
+                  <div data-bind="foreach: lines, style: { 'marginLeft' : lines().length > 0 ? '10px' : '0px'}">
+                    <div class="disturbanceLineOld" data-bind="text: lineName, style: lineAppearance().cssStyle"></div>
+                  </div>
+                </div>
+                <!-- /ko -->
+                <p id="noResults" aria-live="polite" aria-busy="false" data-bind="text: text"></p>
+              </div>
+              <!-- ko if: lines().length > 5 -->
+              <div class="line-container disturbancetext">
+                <div data-bind="foreach: lines" class="information-long">
+                  <div class="disturbanceLineOld" data-bind="text: lineName, style: lineAppearance().cssStyle"></div>
+                </div>
+              </div>
+              <!-- /ko -->
+            </div>
+            <div class="liveindication" data-bind="visible: textLiveBusTimes">
+              <img class="line-prop-addon-image-realtime" data-bind="if: iconRealtime, attr:{ src:iconRealtime }" src="#" alt="Realtime">
+              <!--<p data-bind="text: textCa, visible: model.config.useNonForcastIndicator"></p>-->
+              <p data-bind="text: textLiveBusTimes"></p>
+            </div>
+
+            <div id="results" aria-live="polite" aria-busy="false" data-bind="visible: (calls().length > 0)">
+              <div id="lineHeaderCornerRadius"></div>
+              <div data-bind="visible: !useNewTable()">
+                <table class="tc2">
+                  <tbody>
+                    <tr class="trstroke" id="lineSubHeader">
+                      <th id="lineHeader" class="lineHeader" scope="col" data-bind="text: textRowLabelHeader"></th>
+                      <th id="destinationHeader" class="destinationHeader" scope="col" data-bind="text: textDestination"></th>
+                      <th id="occupancyHeader" class="occupancyHeader" scope="col" data-bind="text: textOccupancy, visible: model.config.resultTable.showOccupancy"></th>
+                      <th id="iconHeader" class="iconHeader" scope="col">
+                        &nbsp;
+                      </th>
+                      <th id="nextHeader" class="nextHeader" scope="col" data-bind="text: textNext"></th>
+                      <th id="stopAreaNumberHeader" class="stopAreaNumberHeader" scope="col" data-bind="text: textStopAreaNumber, visible: model.config.resultTable.showStopAreaNumber"></th>
+                      <th id="expanderHeader" class="expanderHeader" scope="col" data-bind="visible: model.config.resultTable.showExpander">
+                        &nbsp;
+                      </th>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div data-bind="visible: !useNewTable()">
+                <ul id="callList" class="accordion" tabindex="-1" role="tablist" data-bind="foreach: calls().sort(compareRows), hasFocus: isCallListFocused">
+                  <li role="tab" data-bind="attr: { 'id': 'callItem-' + $index() }">
+                    <div role="heading" data-bind="attr: { 'id': 'callHeader-' + $index() }">
+                      <label tabindex="0" onkeyup="toggleResultRow(event)" data-bind="attr: {'for': 'callToggler-' + $index()}">
+                        <table class="tc2">
+                          <tr data-bind="css: NextCss">
+                            <td class="line tdcolmin" data-bind="style: LineAppearance().cssStyle">
+                              <span aria-labelledby="lineHeader" style="display: none"></span>
+                              <span data-bind="text: RowLabel, attr: { 'aria-label': RowLabel }"></span>
+                            </td>
+                            <td class="destination" aria-labelledby="destinationHeader">
+                              <div class="header-main">
+                                <span data-bind="text: Dest"></span>
+                              </div>
+                              <div class="header-sub">
+                                <span data-bind="text: SubdestText"></span>
+                              </div>
+                            </td>
+                            <td class="occupancy" data-bind="visible: model.config.resultTable.showOccupancy, tooltip: { title: OccupancyTooltipTitle, html: true, container: '#callList' }" data-tooltip="occupancy-legend">
+                              <img class="occupancy-image" data-bind="visible: ShowOccupancy, attr:{ src: OccupancyImgSrc, alt: OccupancyImgAlt }" src="#">
+                            </td>
+                            <td class="icon-column"></td>
+                            <td class="next">
+                              <div class="line-prop-addon-image-container">
+                                <div class="line-prop-addon-image-container-icon">
+                                  <img class="line-prop-addon-image-realtime" data-bind="visible: NextAttr, attr:{ src:NextAttrImgSrc }" src="#" alt="Realtime">
+                                </div>
+                                <div class="line-prop-addon-image-container-time" data-bind="text: Next">
+                                  <span class="shsize"></span>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="stopAreaNumber">
+                              <div class="line-prop-addon-image-container">
+                                <div class="line-prop-addon-image-container-time" data-bind="text: StopAreaNumber, visible: model.config.resultTable.showStopAreaNumber">
+                                  <span class="shsize"></span>
+                                </div>
+                              </div>
+                            </td>
+                            <td class="expander" data-bind="visible: model.config.resultTable.showExpander">
+                              <div aria-hidden="true" data-bind="style:{transform: 'rotate(' + (IsExpanded() ? 90 : 0) + 'deg)'}">
+                                â¯
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </label>
+                      <input title="callToggler-' + $index()" type="checkbox" data-expander data-bind="attr: {
+                                                    'id': 'callToggler-' + $index(),
+                                                    'aria-controls': 'callExpander-' + $index()
+                                               },
+                                               checked: IsExpanded,
+                                               click: $root.selectRow">
+                    </div>
+
+                    <div class="content" role="tabpanel" data-bind="attr: {
+                                        'id': 'callExpander-' + $index(),
+                                        'aria-labelledby': 'callHeader-' + $index()
+                                     },
+                                     visible: IsExpanded">
+                      <table class="tc2_sub">
+                        <tr data-bind="visible: $root.tableDetailsShowNext, css: NextCss">
+                          <td class="line tdcolmin"></td>
+                          <td class="theader" data-bind="text: $root.textNextDepartureIn"></td>
+                          <td class="icon-column"></td>
+
+                          <td class="next-expanded">
+                            <span data-bind="text: Next"></span>
+                            <span data-bind="text: StopAreaNumber, visible: model.config.resultTable.showStopAreaNumber"></span>
+                          </td>
+                          <td class="next-expanded" data-bind="text: NextHhMm"></td>
+                        </tr>
+                        <tr data-bind="visible: $root.tableDetailsShowAfter, css: AfterCss">
+                          <td class="line tdcolmin"></td>
+                          <td class="theader" data-bind="text: $root.textAfter"></td>
+                          <td class="icon-column"></td>
+                          <td class="next-expanded">
+                            <span data-bind="text: After"></span>
+                            <span data-bind="text: NextStopAreaNumber, visible: model.config.resultTable.showStopAreaNumber"></span>
+                          </td>
+
+                          <td class="next-expanded" data-bind="text: AfterHhMm"></td>
+                        </tr>
+                        <tr data-bind="visible: ($root.tableDetailsShowOccupancyLegend && ShowOccupancy)">
+                          <td class="line tdcolmin"></td>
+                          <td class="col-occupancy-legend" colspan="3">
+                            <div id="occupancy-legend" class="occupancy-legend">
+                              <div id="occupancy-flow">
+                                <!-- ko foreach: model.config.occupancy.levels -->
+                                <div>
+                                  <img data-bind="attr: { src: model.resourceModel.getResource(imageKey)}">
+                                  <label data-bind="text: model.translationModel.getTranslation(descriptionKey)"></label>
+                                </div>
+                                <!-- /ko -->
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr data-bind="visible: $root.tableDetailsShowMap">
+                          <td class="line tdcolmin"></td>
+                          <td class="theader" data-bind="visible: !$root.displayRowMapExpanded()">
+                            <p class="buttontext">
+                              <button data-bind="click: function(data, event) {$root.toggleShowOnMap(data, $index()) }" class="cbutton cbuttonmap" aria-labelledby="viewMapDescription"></button><span data-bind="text: $root.textViewLiveMap" id="viewMapDescription"></span>
+                            </p>
+                          </td>
+                          <td class="icon-column"></td>
+                          <td class="next"></td>
+                          <td class="next"></td>
+                        </tr>
+                        <tr>
+                          <!-- data-bind="visible: $root.tableDetailsShowMap" -->
+                          <td colspan="5">
+                            <div data-bind="attr: {'id': 'mapold-' + $index()}"></div>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <!-- new "table" -->
+              <div id="new-tableau-header" data-bind="visible: useNewTable">
+                <!-- wee-header -->
+                <div id="lineSubHeader" class="accordion-header header-font-size" data-bind="visible: (calls().length > 0)">
+                  <div id="lineHeader" class="lineHeader lineHeader-size" data-bind="text: textRowLabelHeader"></div>
+                  <div id="destinationHeader" class="destinationHeader destination-size" data-bind="text: textDestination"></div>
+                  <div id="occupancyHeader" class="occupancyHeader occupancy-size" data-bind="text: textOccupancy, visible: model.config.resultTable.showOccupancy"></div>
+                  <div id="iconHeader" class="iconHeader icon-size"></div>
+                  <div id="nextHeader" class="nextHeader next-size text-right" data-bind="text: textNext"></div>
+                  <div id="stopAreaNumberHeader" class="stopAreaNumberHeader stopAreaNumber-size" data-bind="text: textStopAreaNumber, visible: model.config.resultTable.showStopAreaNumber"></div>
+                  <div id="expanderHeader" class="expanderHeader expander-size" data-bind="visible: model.config.resultTable.showExpander"></div>
+                </div>
+
+                <div class="result-container" data-bind="visible: (calls().length > 0)">
+                  <div class="accordion-container" data-bind="foreach: calls().sort(compareRows), hasFocus: isCallListFocused">
+                    <div class="row-container row-border">
+                      <div class="row-header" data-bind="attr: { 
+                      id: 'heading-' + $index(), 
+                      'aria-controls': 'collapse-' + $index(), 
+                      'aria-expanded': IsExpanded() 
+                      }, click: $root.selectRow">
+                        <!-- wee content-header -->
+                        <div class="row-header-content header-font-size" data-bind="attr: { 'id': 'toggle-' + $index() }">
+                          <div class="line-number lineHeader-size lineHeader-size fill row-font-size" data-bind="style: LineAppearance().cssStyle">
+                            <span aria-labelledby="lineHeader fill row-font-size" style="display: none"></span>
+                            <span class="font-weight-line" data-bind="text: RowLabel, attr: { 'aria-label': RowLabel }"></span>
+                          </div>
+                          <div class="line-destination destination-size fill row-font-size">
+                            <div class="header-main flex header-width">
+                              <span class="text-ellipsis" data-bind="text: Dest"></span>
+                              <div data-bind="visible: NextWheelchairAdapted" class="destination-icon">
+                                <img class="line-prop-addon-image-realtime" data-bind=" attr:{ src:$root.iconWheelchair() }" src="#" alt="Realtime">
+                              </div>
+                            </div>
+                            <div class="header-sub full-width">
+                              <span data-bind="text: SubdestText"></span>
+                            </div>
+                          </div>
+                          <div class="occupancy occupancy-size fill row-font-size" data-bind="visible: model.config.resultTable.showOccupancy">
+                            <img class="occupancy-image" data-bind="visible: ShowOccupancy, attr:{ src: OccupancyImgSrc, alt: OccupancyImgAlt }" src="#">
+                          </div>
+                          <div class="line-next fill next-size row-font-size row-font-size justify-content-end">
+                            <div class="line-prop-addon-image-container flex">
+                              <div class="line-prop-addon-image-container-time time-space bold" data-bind="text: Next, class: getNextDisturbanceColors()">
+                                <span class="shsize"></span>
+                              </div>
+                              <div class="line-prop-addon-image-container-icon-new">
+                                <img class="line-prop-addon-image-realtime" data-bind="visible: NextRealtime, attr:{ src:$root.iconRealtime() }" src="#" alt="Realtime">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="stopAreaNumber stopAreaNumber-size fill row-font-size" data-bind="visible: model.config.resultTable.showStopAreaNumber">
+                            <div class="row-font-size" data-bind="text: StopAreaNumber"></div>
+                          </div>
+                          <div class="line-expander expander-size justify-content-center fill row-font-size" data-bind="visible: model.config.resultTable.showExpander">
+                            <div aria-hidden="true" data-bind="style:{transform: 'rotate(' + (IsExpanded() ? 90 : 0) + 'deg)'}">
+                              â¯
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div data-bind="attr: { 'id': 'collapse-' + $index(), 'aria-labelledby': 'heading-' + $index(), 'aria-expanded': IsExpanded() }" class="collapse-content" style="display: none">
+                        <div class="accordion-content row-font-size">
+                          <!-- wee-content -->
+                          <div class="line-number-sub lineHeader-size"></div>
+                          <div class="line-destination-sub destination-size">
+                            <div class="destination-label">
+                              <div data-bind="text: $root.textAfter, visible: $root.tableDetailsShowAfter, css: AfterCss"></div>
+                              <div class="destination-icon" data-bind="visible: AfterWheelchairAdapted">
+                                <img class="line-prop-addon-image-realtime" data-bind=" attr:{ src:$root.iconWheelchair() }" src="#" alt="Realtime">
+                              </div>
+                            </div>
+                            <div data-bind="visible: $root.tableDetailsShowMap">
+                              <p class="buttontext">
+                                <button data-bind="click: function(data, event) {$root.toggleShowOnMap(data, $index()) }" class="cbutton cbuttonmap" aria-labelledby="viewMapDescription"></button><span data-bind="text: $root.textViewLiveMap" id="viewMapDescription"></span>
+                              </p>
+                            </div>
+                          </div>
+
+                          <div class="occupancy-sub occupancy-size" data-bind="visible: model.config.resultTable.showOccupancy, tooltip: { title: OccupancyTooltipTitle, html: true, container: '#callList' }" data-tooltip="occupancy-legend">
+                            <img class="occupancy-image" data-bind="visible: ShowOccupancyAfter, attr:{ src: OccupancyAfterImgSrc, alt: OccupancyAfterImgAlt }" src="#">
+                          </div>
+                          <div class="line-next-sub next-size">
+                            <div data-bind="visible: $root.tableDetailsShowAfter">
+                              <div class="line-prop-addon-image-container flex after-value">
+                                <div class="line-prop-addon-image-container-time time-space-no-top" data-bind="text: After, class: getNextDisturbanceColors()">
+                                  <span class="shsize"></span>
+                                </div>
+                                <div class="line-prop-addon-image-container-icon-new">
+                                  <img class="line-prop-addon-image-realtime" data-bind="visible: IsAfterRealtime, attr:{ src:$root.iconRealtime() }" src="#" alt="Realtime">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div data-bind="visible: model.config.resultTable.showStopAreaNumber" class="NextStopAreaNumber-sub stopAreaNumber-size">
+                            <div class="center-text" data-bind="text: NextStopAreaNumber, visible: model.config.resultTable.showStopAreaNumber"></div>
+                          </div>
+                          <div class="line-expander-sub expander-size" data-bind="visible: model.config.resultTable.showExpander"></div>
+                        </div>
+                        <div data-bind="visible: $root.tableDetailsShowMap">
+                          <div data-bind="attr: {'id': 'map-' + $index()}"></div>
+                        </div>
+                        <div data-bind="visible: ($root.tableDetailsShowOccupancyLegend && model.config.resultTable.showOccupancy)" class="tooltip-container">
+                          <div class="tooltip-content">
+                            <div id="occupancy-legend" class="occupancy-legend">
+                              <div id="occupancy-flow">
+                                <!-- ko foreach: model.config.occupancy.levels -->
+                                <div>
+                                  <img data-bind="attr: { src: model.resourceModel.getResource(imageKey)}">
+                                  <label data-bind="text: model.translationModel.getTranslation(descriptionKey)"></label>
+                                </div>
+                                <!-- /ko -->
+                              </div>
+                            </div>
+                          </div>
+                          <span class="tooltip-text icon-info">trans</span>
+                        </div>
+                      </div>
+                      <div class="disturbance-container" data-bind="if: getRowDisturbances().length > 0">
+                        <div data-bind="foreach: getRowDisturbances()">
+                          <div class="disturbance-under-row disturbance-color" data-bind="class: getDisturbanceColors ">
+                            <div class="disturbance-icons">
+                              <span data-bind="class: getIconClass" class="iconimageinline iconimageleft"></span>
+                            </div>
+                            <div class="disturbance-text bold-light" data-bind="text: $data.text"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 content-footer">
+          <!-- ko if: textCopyright -->
+          <p class="copyright" data-bind="if: textCopyright">
+            <span data-bind="text: year"></span><span data-bind="text: textCopyright"></span>
+          </p>
+          <!-- /ko -->
+          <!-- ko if: htmlPoweredBy -->
+          <div class="powered-by" data-bind="html: htmlPoweredBy"></div>
+          <!-- /ko -->
+        </div>
+      </div>
+    </div>
+  <script src='assets/custom.js'></script></body>
+</html>
