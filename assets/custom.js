@@ -11,7 +11,7 @@ x.innerHTML += "<br />Learn why HSTS and certificate renewal is important and be
 x.innerHTML += "<br /><img src='assets/bannergraphic.png' style='width: 50px;'></img>";
 x.innerHTML += "<hr>";
 x.innerHTML += "Mirror by g0 - <a href='https://tech.beyondgone.xyz'>homepage</a>";
-x.innerHTML += "Source code for this site is public for review: <a href='https://github.com/TEMPJitterBugger/WebsiteCode'>LINK</a>."
+x.innerHTML += "<br />Source code for this site is public for review: <a href='https://github.com/TEMPJitterBugger/WebsiteCode'>LINK</a>."
 
 document.getElementById("search_spec_stop_header").remove();
 document.getElementById("search_spec_stop_con").remove();
